@@ -222,8 +222,8 @@ export class MersenneTwister {
 		if (low >= high)
 			throw new RangeError("random_int arguments out of range");
 
-		flt = this.random_float();
-		scale = high - low + 1;
+		let flt = this.random_float();
+		let scale = high - low + 1;
 
 		return low + Math.floor(flt * scale);
 	}
