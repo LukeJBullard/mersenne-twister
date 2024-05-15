@@ -1,4 +1,4 @@
-var MersenneTwister = require('../src/mersenne-twister');
+import { MersenneTwister } from '../src/mersenne-twister.js';
 var g = new MersenneTwister();
 
 describe('Generator', function() {
