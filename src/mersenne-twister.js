@@ -79,7 +79,10 @@ var MersenneTwister = function(seed) {
 	this.mt = new Array(this.N); /* the array for the state vector */
 	this.mti=this.N+1; /* mti==N+1 means mt[N] is not initialized */
 
-	if (seed.constructor == Array) {
+	if (typeof(seed) === "string") {
+		this.init_string(seed);
+	}
+	else if (seed.constructor == Array) {
 		this.init_by_array(seed, seed.length);
 	}
 	else {
@@ -206,5 +209,36 @@ MersenneTwister.prototype.random_long = function() {
 }
 
 /* These real versions are due to Isaku Wada, 2002/01/09 added */
+
+//accessibility methods added by Luke Bullard, 2024/05/15
+MersenneTwister.prototype.init_string = function(seed) {
+	let initArray = Array(seed.length);
+	for (let i=0;i<seed.length;i++)
+	{
+		initArray[i] = seed.charCodeAt(i);
+	}
+	this.init_by_array(initArray, initArray.length);
+}
+
+MersenneTwister.prototype.random_float = function() {
+	return this.random_incl();
+}
+
+//returns a random integer beween low and high inclusive
+MersenneTwister.prototype.ranged_random = function(low, high) {
+	if (typeof(low) !== 'number' || typeof(high) !== 'number')
+		throw new TypeError("random_int invalid arguments");
+
+	low = Math.floor(low)
+	high = Math.floor(high)
+
+	if (low >= high)
+		throw new RangeError("random_int arguments out of range")
+
+	flt = this.random_float();
+	scale = high - low + 1;
+
+	return low + Math.floor(flt * scale);
+}
 
 module.exports = MersenneTwister;

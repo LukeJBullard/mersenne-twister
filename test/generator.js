@@ -1,4 +1,4 @@
-var MersenneTwister = require('../');
+var MersenneTwister = require('../src/mersenne-twister');
 var g = new MersenneTwister();
 
 describe('Generator', function() {
@@ -60,4 +60,22 @@ describe('Generator', function() {
                         }
 		}
  	});
+	it('Should allow seeding via string', function() {
+		var seed = "abcd";
+		var g1 = new MersenneTwister(seed);
+		var g2 = new MersenneTwister(seed);
+		var g3 = new MersenneTwister();
+		g3.init_string(seed);
+
+		for (var i = 0; i < 5; ++i) {
+			let g1_output = g1.random();
+			let g2_output = g2.random();
+
+			let g3_output = g3.random();
+
+			g1_output.should.be.exactly(g2_output);
+			g2_output.should.be.exactly(g3_output);
+		}
+	});
+	
 });
